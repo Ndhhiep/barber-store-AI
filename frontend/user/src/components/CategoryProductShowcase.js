@@ -1,39 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import ProductCard from './ProductCard'; // Assuming ProductCard is in the same directory
-
-const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+import ProductCard from './ProductCard';
+import ProductShowcaseFallback from './ProductShowcaseFallback';
+import { apiService } from '../services/apiService';
 
 const CategoryProductShowcase = () => {
   const [showcaseData, setShowcaseData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [useFallback, setUseFallback] = useState(false);
+  
   useEffect(() => {
     const fetchShowcaseData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${API_URL}/api/products/showcase-by-category`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await apiService.getShowcaseProducts();
         setShowcaseData(data);
+        setUseFallback(false);
       } catch (err) {
         console.error("Fetch error:", err);
-        setError(err.message || 'Failed to fetch showcase products.');
-        setShowcaseData([]); // Clear data on error
+        setError(err.message || 'Failed to fetch showcase products. Please try refreshing the page.');
+        setShowcaseData([]);
+        
+        // Use fallback after 3 seconds if error persists
+        setTimeout(() => {
+          setUseFallback(true);
+        }, 3000);
       } finally {
         setLoading(false);
       }
     };
 
     fetchShowcaseData();
-  }, []); // Empty dependency array ensures this runs only once on mount
-
+  }, []);
   if (loading) {
     return <div className="text-center p-5">Loading products...</div>;
+  }
+
+  if (error && useFallback) {
+    return <ProductShowcaseFallback />;
   }
 
   if (error) {
