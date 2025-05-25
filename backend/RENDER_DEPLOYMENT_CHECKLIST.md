@@ -109,5 +109,17 @@ Your backend will be deployed at: `https://barber-store.onrender.com`
 
 ---
 
+## 📚 Tài Liệu Bổ Sung
+
+### Hướng Dẫn Tiếng Việt
+Xem file `HUONG_DAN_DEPLOY_RENDER_TIENG_VIET.md` để có hướng dẫn chi tiết bằng tiếng Việt.
+
+### Quick Links
+- [English Guide](./DEPLOYMENT.md)
+- [Vietnamese Guide](./HUONG_DAN_DEPLOY_RENDER_TIENG_VIET.md)
+- [Deployment Status](./DEPLOYMENT_STATUS.md)
+
+---
+
 **Status**: ✅ Backend is fully configured and ready for Render deployment
-**Last Updated**: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+**Last Updated**: May 25, 2025
