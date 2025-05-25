@@ -46,9 +46,7 @@ const TawkTo = () => {
         // Enhanced error handling
         window.Tawk_API.onChatMaximized = function() {
           console.log('Tawk.to chat maximized');
-        };
-
-        // Create script with enhanced attributes
+        };        // Create script with enhanced attributes
         const script = document.createElement('script');
         script.async = true;
         script.src = 'https://embed.tawk.to/68330ac87b08d5190f6b68a7/1is3m482g';
@@ -56,10 +54,29 @@ const TawkTo = () => {
         script.setAttribute('crossorigin', 'anonymous');
         script.setAttribute('data-cfasync', 'false');
         script.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+        script.setAttribute('data-turbo-track', 'reload');
         
         // Handle load events
         script.onload = () => {
           console.log('Tawk.to script loaded successfully');
+          
+          // Additional configuration for Tawk.to
+          if (window.Tawk_API) {
+            window.Tawk_API.customStyle = {
+              visibility: {
+                desktop: {
+                  position: 'br',
+                  xOffset: 20,
+                  yOffset: 20
+                },
+                mobile: {
+                  position: 'br',
+                  xOffset: 10,
+                  yOffset: 10
+                }
+              }
+            };
+          }
         };
         
         script.onerror = (err) => {

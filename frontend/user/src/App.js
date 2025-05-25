@@ -7,6 +7,7 @@ import { CartProvider } from './context/CartContext';
 import { SocketProvider } from './context/SocketContext';
 import UserRoutes from './routes/UserRoutes';
 import TawkTo from './components/TawkTo';
+import CSPDebugger from './components/CSPDebugger';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,9 +38,9 @@ function AppContent() {
               {/* User routes */}
               <Route path="/*" element={<UserRoutes />} />
             </Routes>
-          </main>
-          <Footer />
+          </main>          <Footer />
           <TawkTo />
+          <CSPDebugger />
         </div>
       </CartProvider>
     </SocketProvider>
