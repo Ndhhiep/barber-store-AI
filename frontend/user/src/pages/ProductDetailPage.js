@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import '../css/ProductsPage.css';
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -14,7 +16,7 @@ const ProductDetailPage = () => {
     const fetchProductDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/products/${id}`);
+        const response = await fetch(`${API_URL}/api/products/${id}`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

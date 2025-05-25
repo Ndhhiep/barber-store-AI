@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard'; // Assuming ProductCard is in the same directory
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 const CategoryProductShowcase = () => {
   const [showcaseData, setShowcaseData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ const CategoryProductShowcase = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch('/api/products/showcase-by-category');
+        const response = await fetch(`${API_URL}/api/products/showcase-by-category`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

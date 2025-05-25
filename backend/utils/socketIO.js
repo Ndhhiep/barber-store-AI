@@ -12,7 +12,7 @@ const initSocketIO = (server, corsOptions = {}) => {
   // Tạo Socket.IO server với cấu hình CORS
   io = socketIO(server, {
     cors: {
-      origin: corsOptions.origin || ['http://localhost:3000', 'http://localhost:3001'],
+      origin: corsOptions.origin || ['http://localhost:3000', 'http://localhost:3001', 'https://barber-store-ai.vercel.app'],
       methods: corsOptions.methods || ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
       allowedHeaders: corsOptions.allowedHeaders || ['Content-Type', 'Authorization'],
       credentials: corsOptions.credentials !== undefined ? corsOptions.credentials : true
