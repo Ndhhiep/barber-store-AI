@@ -17,9 +17,13 @@ const initSocketIO = (server, corsOptions = {}) => {
       allowedHeaders: corsOptions.allowedHeaders || ['Content-Type', 'Authorization'],
       credentials: corsOptions.credentials !== undefined ? corsOptions.credentials : true
     },
-    transports: ['polling', 'websocket'], // Cho phép cả polling và websocket
+    transports: ['websocket', 'polling'], // Websocket first for better performance
     pingTimeout: 60000, // Tăng thời gian chờ ping
-    pingInterval: 25000 // Giảm khoảng thời gian giữa các ping
+    pingInterval: 25000, // Giảm khoảng thời gian giữa các ping
+    // Production optimizations
+    allowEIO3: true,
+    connectTimeout: 45000,
+    maxHttpBufferSize: 1e6 // 1MB
   });
 
   // Xử lý sự kiện kết nối

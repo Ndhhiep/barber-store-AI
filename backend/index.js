@@ -28,7 +28,14 @@ const server = http.createServer(app);
 
 // CORS configuration with specific options - định nghĩa một lần dùng chung
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'https://barber-store-ai.vercel.app'], // Allow both frontend origins
+  origin: [
+    'http://localhost:3000', 
+    'http://localhost:3001', 
+    'https://barber-store-ai.vercel.app',
+    'https://barber-store-ai-user.vercel.app', // User frontend domain
+    'https://barber-store-ai-staff.vercel.app', // Staff frontend domain
+    'https://barber-store-tan.vercel.app' // Current production domain
+  ], // Allow both frontend origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Added PATCH method
   allowedHeaders: ['Content-Type', 'Accept', 'Authorization'], // Allow these headers
   credentials: true, // Allow cookies
@@ -62,6 +69,16 @@ app.get('/', (req, res) => {
     status: 'healthy',
     version: '1.0.0',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
