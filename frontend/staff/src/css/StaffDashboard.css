@@ -1,0 +1,35 @@
+/* Container bảng dashboard */
+.dashboard-table-container {
+  height: 350px;
+  overflow-y: auto;
+  margin-bottom: 0;
+}
+
+/* Đảm bảo header bảng và cuộn đúng */
+.dashboard-table-container table {
+  width: 100%;
+}
+
+.dashboard-table-container thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 1;
+}
+
+/* Phần thân card chứa bảng không có padding dưới */
+.dashboard-card .card-body {
+  padding-bottom: 0;
+}
+
+/* Thiết lập chiều cao cố định cho card */
+.dashboard-card {
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Thông báo khi bảng trống */
+.dashboard-card .text-center {
+  margin-top: 140px;
+}
