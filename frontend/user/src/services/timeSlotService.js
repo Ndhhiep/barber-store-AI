@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { isServerOnline } from '../utils/serverCheck';
 
-const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000/api'; // Use variable from .env file
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000'; // Use variable from .env file
 
 // Helper function to get auth headers
 const getAuthHeader = () => {
@@ -60,7 +60,7 @@ const getTimeSlotStatus = async (barberId, date) => {
     }
     
     // Regular flow for specific barber
-    const response = await axios.get(`${API_URL}/bookings/time-slots-status`, {
+    const response = await axios.get(`${API_URL}/api/bookings/time-slots-status`, {
       params: {
         barberId,
         date
@@ -85,7 +85,7 @@ const getTimeSlotStatus = async (barberId, date) => {
  */
 const checkTimeSlotAvailability = async (barberId, date, timeSlot) => {
   try {
-    const response = await axios.get(`${API_URL}/bookings/check-availability`, {
+    const response = await axios.get(`${API_URL}/api/bookings/check-availability`, {
       params: {
         barberId,
         date,

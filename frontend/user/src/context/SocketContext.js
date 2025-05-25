@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import io from 'socket.io-client';
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 // Create context
 const SocketContext = createContext(null);
 
@@ -22,9 +24,8 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     console.log('Initializing Socket.IO connection...');
     
-    try {
-      // Create Socket.IO instance
-      const socketInstance = io('http://localhost:5000', {
+    try {      // Create Socket.IO instance
+      const socketInstance = io(API_URL, {
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
         autoConnect: true,

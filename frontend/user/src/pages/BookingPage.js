@@ -7,6 +7,8 @@ import serviceService from '../services/serviceService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BookingConfirmedModal from '../components/BookingConfirmedModal';
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 const BookingPage = () => {
   const [bookingData, setBookingData] = useState({
     service: '',
@@ -144,9 +146,8 @@ const BookingPage = () => {
           setIsGuestMode(true); // Set guest mode when no token is found
           return;
         }
-        
-        // Fetch user data using the token
-        const response = await axios.get('http://localhost:5000/api/auth/me', {
+          // Fetch user data using the token
+        const response = await axios.get(`${API_URL}/api/auth/me`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -215,11 +216,9 @@ const BookingPage = () => {
   // Wrap `validateBookingToken` in a `useCallback` hook
   const validateBookingToken = useCallback(async (token) => {
     try {
-      setIsValidatingToken(true);
-  
-      // Call API to validate the token
+      setIsValidatingToken(true);      // Call API to validate the token
       const response = await axios.post(
-        'http://localhost:5000/api/bookings/confirm',
+        `${API_URL}/api/bookings/confirm`,
         { token }
       );
   
@@ -380,12 +379,11 @@ const BookingPage = () => {
         service: serviceName, // Convert service ID to service name as required by the backend
         requireEmailConfirmation: true, // New flag to indicate email confirmation is needed
         // For guest bookings, ensure user_id is null to avoid FK constraint errors
-        user_id: isGuestMode ? null : bookingData.user_id
-      };
+        user_id: isGuestMode ? null : bookingData.user_id      };
       
       // Submit booking
       const response = await axios.post(
-        'http://localhost:5000/api/bookings',
+        `${API_URL}/api/bookings`,
         requestData,
         { headers }
       );

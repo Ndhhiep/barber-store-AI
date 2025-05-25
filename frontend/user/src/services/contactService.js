@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000/api'; // Use variable from .env file
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000'; // Use variable from .env file
 
 /**
  * Gửi thông tin liên hệ từ form contact
@@ -9,7 +9,7 @@ const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000/
  */
 export const submitContactForm = async (contactData) => {
   try {
-    const response = await axios.post(`${API_URL}/contacts`, contactData);
+    const response = await axios.post(`${API_URL}/api/contacts`, contactData);
     return response.data;
   } catch (error) {
     console.error('Error submitting contact form:', error);

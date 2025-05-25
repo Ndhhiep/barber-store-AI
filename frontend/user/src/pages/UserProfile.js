@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/UserProfile.css';
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,10 +27,9 @@ const UserProfile = () => {
         
         if (!token) {
           navigate('/login?redirect=user-profile');
-          return;
-        }
+          return;        }
         
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch(`${API_URL}/api/auth/me`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -80,10 +81,9 @@ const UserProfile = () => {
     setIsEditing(false);
     
     // Refetch user data to reset form
-    const fetchUserData = async () => {
-      try {
+    const fetchUserData = async () => {      try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch(`${API_URL}/api/auth/me`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -154,9 +154,8 @@ const UserProfile = () => {
         let response;
       
       // If the user is changing their password
-      if (userData.currentPassword && userData.newPassword) {
-        // Separate call to update password
-        response = await fetch('http://localhost:5000/api/auth/update-password', {
+      if (userData.currentPassword && userData.newPassword) {        // Separate call to update password
+        response = await fetch(`${API_URL}/api/auth/update-password`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -167,9 +166,8 @@ const UserProfile = () => {
             newPassword: userData.newPassword
           })
         });
-      } else {
-        // Regular profile update (name, phone)
-        response = await fetch('http://localhost:5000/api/auth/update-profile', {
+      } else {        // Regular profile update (name, phone)
+        response = await fetch(`${API_URL}/api/auth/update-profile`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

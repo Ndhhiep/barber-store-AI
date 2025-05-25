@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../css/LoginPage.css'; // We can reuse the login page styles
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -54,9 +56,8 @@ const RegisterPage = () => {
     try {
       // Remove confirmPassword before sending to API
       const { confirmPassword, ...registrationData } = formData;
-      
-      await axios.post(
-        'http://localhost:5000/api/auth/register', 
+        await axios.post(
+        `${API_URL}/api/auth/register`, 
         registrationData
       );
       

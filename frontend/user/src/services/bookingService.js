@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000/api'; // Use variable from .env file
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000'; // Use variable from .env file
 
 // Helper function to get auth headers
 const getAuthHeader = () => {
@@ -17,7 +17,7 @@ const getAuthHeader = () => {
  */
 export const getMyBookings = async () => {
   try {
-    const response = await axios.get(`${API_URL}/bookings/my-bookings`, {
+    const response = await axios.get(`${API_URL}/api/bookings/my-bookings`, {
       headers: getAuthHeader()
     });
     return response;
@@ -34,7 +34,7 @@ export const getMyBookings = async () => {
  */
 export const createBooking = async (bookingData) => {
   try {
-    const response = await axios.post(`${API_URL}/bookings`, bookingData, {
+    const response = await axios.post(`${API_URL}/api/bookings`, bookingData, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -50,7 +50,7 @@ export const createBooking = async (bookingData) => {
  */
 export const cancelBooking = async (id) => {
   try {
-    const response = await axios.put(`${API_URL}/bookings/${id}/cancel`, {}, {
+    const response = await axios.put(`${API_URL}/api/bookings/${id}/cancel`, {}, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -66,7 +66,7 @@ export const cancelBooking = async (id) => {
  */
 export const getBookingById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/bookings/${id}`, {
+    const response = await axios.get(`${API_URL}/api/bookings/${id}`, {
       headers: getAuthHeader()
     });
     return response;
@@ -84,7 +84,7 @@ export const getBookingById = async (id) => {
  */
 export const getAvailableTimeSlots = async (date, barberId = null) => {
   try {
-    let endpoint = `${API_URL}/bookings/available-slots?date=${date}`;
+    let endpoint = `${API_URL}/api/bookings/available-slots?date=${date}`;
     if (barberId) {
       endpoint += `&barberId=${barberId}`;
     }

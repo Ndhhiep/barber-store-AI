@@ -16,10 +16,9 @@ const ProductsPage = () => {
     const fetchProductsByCategory = async () => {
       try {
         setLoading(true);
-        
-        // Use the API service or configured base URL
-        const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-        const { data } = await axios.get(`${baseUrl}/products/categories`);
+          // Use the API service or configured base URL
+        const baseUrl = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+        const { data } = await axios.get(`${baseUrl}/api/products/categories`);
         
         console.log("Products API Response:", data);
         

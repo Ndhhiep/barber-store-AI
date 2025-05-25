@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000/api'; // Use variable from .env file
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000'; // Use variable from .env file
 
 // Helper function to get auth headers
 const getAuthHeader = () => {
@@ -17,7 +17,7 @@ const getAuthHeader = () => {
  */
 export const getMyOrders = async () => {
   try {
-    const response = await axios.get(`${API_URL}/orders/user/my-orders`, {
+    const response = await axios.get(`${API_URL}/api/orders/user/my-orders`, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -40,7 +40,7 @@ export const getMyOrders = async () => {
  */
 export const getOrderById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/orders/${id}`, {
+    const response = await axios.get(`${API_URL}/api/orders/${id}`, {
       headers: getAuthHeader()
     });
     return response.data;
@@ -75,7 +75,7 @@ export const createOrder = async (orderData) => {
         console.warn('Error parsing user data:', error);
       }
     }
-      const response = await axios.post(`${API_URL}/orders`, orderData, {
+      const response = await axios.post(`${API_URL}/api/orders`, orderData, {
       headers: getAuthHeader()
     });
     return response.data;

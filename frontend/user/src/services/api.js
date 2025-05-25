@@ -2,11 +2,11 @@ import axios from 'axios';
 import { isServerOnline, handleApiError } from '../utils/serverCheck';
 import { logout } from './authService';
 
-const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000/api'; // Use variable from .env file
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000'; // Use variable from .env file
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: `${API_URL}/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

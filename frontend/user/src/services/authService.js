@@ -66,7 +66,7 @@ export const login = async (email, password) => {
  */
 export const register = async (userData) => {
   try {
-    const result = await api.post('/auth/register', userData);
+    const result = await api.post('/api/auth/register', userData);
     
     if (result.success && result.token) {
       localStorage.setItem('token', result.token);
@@ -95,9 +95,8 @@ export const getUserProfile = async () => {
     if (userStr) {
       return JSON.parse(userStr);
     }
-    
-    // Nếu không có trong localStorage, lấy từ API
-    const response = await api.get('/auth/me');
+      // Nếu không có trong localStorage, lấy từ API
+    const response = await api.get('/api/auth/me');
     
     if (response.data && response.data.user) {
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -118,7 +117,7 @@ export const getUserProfile = async () => {
  */
 export const updateUserProfile = async (userData) => {
   try {
-    const result = await api.put('/auth/update-profile', userData);
+    const result = await api.put('/api/auth/update-profile', userData);
     
     // Cập nhật thông tin user trong localStorage nếu thành công
     if (result.success && result.data && result.data.user) {

@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/BookingPage.css';
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 const BookingConfirmedPage = () => {
   const [isValidatingToken, setIsValidatingToken] = useState(true);
   const [bookingStatus, setBookingStatus] = useState({
@@ -20,10 +22,9 @@ const BookingConfirmedPage = () => {
 
   const validateBookingToken = useCallback(async (token) => {
     try {
-      setIsValidatingToken(true);
-      // Call API to validate the token
+      setIsValidatingToken(true);      // Call API to validate the token
       const response = await axios.post(
-        'http://localhost:5000/api/bookings/confirm',
+        `${API_URL}/api/bookings/confirm`,
         { token }
       );
       if (response.data.success) {

@@ -2,7 +2,7 @@
  * Utility for checking server connectivity and providing feedback
  */
 
-const API_URL = 'http://localhost:5000'; // Base API URL
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000'; // Use variable from .env file
 
 /**
  * Check if the server is reachable

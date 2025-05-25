@@ -4,6 +4,8 @@ import { useCart } from '../context/CartContext';
 import PayPalCheckoutButton from '../components/PayPalCheckoutButton';
 import '../css/CartPage.css';
 
+const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
+
 const CartPage = () => {
   const { 
     cartItems, 
@@ -33,9 +35,8 @@ const CartPage = () => {
   // Check server connectivity when component mounts
   useEffect(() => {
     const checkServerStatus = async () => {
-      try {
-        // First try to connect to the root API endpoint
-        const response = await fetch('http://localhost:5000/', {
+      try {        // First try to connect to the root API endpoint
+        const response = await fetch(`${API_URL}/`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json'
@@ -101,7 +102,7 @@ const CartPage = () => {
           if (token) {
             // Fetch user profile data
             try {
-              const profileResponse = await fetch('http://localhost:5000/api/auth/me', {
+              const profileResponse = await fetch(`${API_URL}/api/auth/me`, {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -124,7 +125,7 @@ const CartPage = () => {
             
             // Try to fetch most recent order for address info
             try {
-              const ordersResponse = await fetch('http://localhost:5000/api/orders/user/my-orders', {
+              const ordersResponse = await fetch(`${API_URL}/api/orders/user/my-orders`, {
                 headers: {
                   'Authorization': `Bearer ${token}`
                 }
@@ -252,10 +253,8 @@ const CartPage = () => {
         orderData.paymentStatus = 'paid';
         orderData.transactionId = paymentProcessing.id;
         orderData.paymentDetails = paymentProcessing;
-      }
-
-      // Use a hardcoded URL for testing
-      const apiUrl = 'http://localhost:5000/api/orders';
+      }      // Use configured API URL
+      const apiUrl = `${API_URL}/api/orders`;
       
       console.log('Sending order to:', apiUrl);
       console.log('Order data:', JSON.stringify(orderData));
