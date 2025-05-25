@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { CartProvider } from './context/CartContext'; 
 import { SocketProvider } from './context/SocketContext';
 import UserRoutes from './routes/UserRoutes';
+import TawkTo from './components/TawkTo';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -38,6 +39,7 @@ function AppContent() {
             </Routes>
           </main>
           <Footer />
+          <TawkTo />
         </div>
       </CartProvider>
     </SocketProvider>
@@ -50,6 +52,7 @@ function App() {
       <ScrollToTop />
       <AppContent />
     </Router>
+    
   );
 }
 

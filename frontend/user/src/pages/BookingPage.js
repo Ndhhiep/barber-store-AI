@@ -72,8 +72,8 @@ const BookingPage = () => {
       try {
         setLoadingBarbers(true);
         const barbers = await barberService.getAllBarbers();
-        setBarberList(barbers);
-      } catch (error) {        // Error handled silently
+        setBarberList(barbers);      } catch (error) {
+        console.error('Failed to fetch barbers:', error);
       } finally {
         setLoadingBarbers(false);
       }
@@ -90,8 +90,8 @@ const BookingPage = () => {
         const response = await serviceService.getAllServices();
         // Only use active services
         const activeServices = response.data.filter(service => service.isActive !== false);
-        setServiceList(activeServices);
-      } catch (error) {        // Error handled silently
+        setServiceList(activeServices);      } catch (error) {
+        console.error('Failed to fetch services:', error);
         // If API fails, provide empty services list
         setServiceList([]);
       } finally {
@@ -100,8 +100,7 @@ const BookingPage = () => {
     };
 
     fetchServices();
-  }, []);
-  // Check if a time slot should be disabled - wrapped in useCallback
+  }, []);  // Check if a time slot should be disabled - wrapped in useCallback
   const isTimeSlotDisabled = useCallback((timeSlot) => {
     // If we have statuses from the backend, use those
     if (timeSlotStatuses.length > 0) {
@@ -111,9 +110,34 @@ const BookingPage = () => {
       }
     }
     
-    // If we don't have status data yet, assume the slot is available
+    // If we don't have API data, apply basic time filtering to prevent showing invalid slots
+    if (bookingData.date) {
+      const selectedDate = new Date(bookingData.date);
+      const today = new Date();
+      
+      // Check if selected date is today
+      if (selectedDate.toDateString() === today.toDateString()) {
+        // For today, disable past time slots and slots within 30 minutes
+        const [slotHour, slotMinute] = timeSlot.split(':').map(Number);
+        const slotTotalMinutes = slotHour * 60 + slotMinute;
+        
+        const currentHour = today.getHours();
+        const currentMinute = today.getMinutes();
+        const currentTotalMinutes = currentHour * 60 + currentMinute;
+        
+        // Disable if slot is in the past or within 30 minutes
+        return slotTotalMinutes < (currentTotalMinutes + 30);
+      }
+      
+      // For past dates, disable all slots
+      if (selectedDate < today.setHours(0, 0, 0, 0)) {
+        return true;
+      }
+    }
+    
+    // For future dates or when no date is selected, assume available
     return false;
-  }, [timeSlotStatuses]);
+  }, [timeSlotStatuses, bookingData.date]);
   // Check if a time slot is in the past or booked - for future use in showing specific messages
   // eslint-disable-next-line no-unused-vars
   
@@ -200,9 +224,9 @@ const BookingPage = () => {
                 time: ''
               }));
             }
-          }
-        } catch (error) {
-          // Error handled silently
+          }        } catch (error) {
+          // Log error for debugging but don't show to user
+          console.error('Failed to fetch time slot statuses:', error);
           setTimeSlotStatuses([]);
         } finally {
           setIsLoadingTimeSlots(false);
@@ -672,31 +696,38 @@ const BookingPage = () => {
                                           <span className="visually-hidden">Loading...</span>
                                         </div>
                                         <span className="text-primary fw-medium">Loading available time slots...</span>
-                                      </div>
-                                    ) : (
-                                      <div className="row g-2">
-                                        {(timeSlotStatuses.length > 0 ? timeSlotStatuses.map(slot => slot.start_time) : timeSlots).map((time, index) => {
-                                          const disabled = isTimeSlotDisabled(time);
-                                          return (
-                                            <div key={index} className="col-6 col-md-3">
-                                              <button
-                                                type="button"
-                                                className={`btn time-slot-btn w-100 ${bookingData.time === time ? 'active' : ''} ${disabled ? 'disabled' : ''}`}
-                                                onClick={() => !disabled && handleTimeSelect(time)}
-                                                disabled={disabled}
-                                              >
-                                                <i className={`bi bi-${disabled ? 'lock-fill' : 'clock'} me-1 small`}></i>
-                                                {time}
-                                              </button>
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
+                                      </div>                                    ) : (
+                                      <>
+                                        {timeSlotStatuses.length === 0 && bookingData.barber_id && bookingData.date && !isLoadingTimeSlots && (
+                                          <div className="alert alert-warning mb-3 py-2 px-3">
+                                            <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                            <small>Unable to load real-time availability. Showing basic time slots with past times filtered.</small>
+                                          </div>
+                                        )}
+                                        <div className="row g-2">
+                                          {(timeSlotStatuses.length > 0 ? timeSlotStatuses.map(slot => slot.start_time) : timeSlots).map((time, index) => {
+                                            const disabled = isTimeSlotDisabled(time);
+                                            return (
+                                              <div key={index} className="col-6 col-md-3">
+                                                <button
+                                                  type="button"
+                                                  className={`btn time-slot-btn w-100 ${bookingData.time === time ? 'active' : ''} ${disabled ? 'disabled' : ''}`}
+                                                  onClick={() => !disabled && handleTimeSelect(time)}
+                                                  disabled={disabled}
+                                                >
+                                                  <i className={`bi bi-${disabled ? 'lock-fill' : 'clock'} me-1 small`}></i>
+                                                  {time}
+                                                </button>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      </>
                                     )}
                                   </div>
                                 </div>
                               </div>
-                              <div className="d-flex mt-2 align-items-center">
+                <div className="d-flex mt-2 align-items-center">
                                 <i className="bi bi-info-circle text-primary me-2"></i>
                                 <div>
                                   {bookingData.date === formatDate(new Date()) && (
@@ -707,6 +738,11 @@ const BookingPage = () => {
                                   {bookingData.barber_id && bookingData.date && timeSlotStatuses.length > 0 && (
                                     <small className="text-muted d-block">
                                       <i className="bi bi-lock me-1"></i> Grayed out time slots are already booked
+                                    </small>
+                                  )}
+                                  {bookingData.barber_id && bookingData.date && timeSlotStatuses.length === 0 && !isLoadingTimeSlots && (
+                                    <small className="text-muted d-block">
+                                      <i className="bi bi-exclamation-triangle me-1"></i> Showing basic time slots - live availability check failed
                                     </small>
                                   )}
                                   {(!bookingData.barber_id || !bookingData.date) && (
