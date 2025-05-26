@@ -1,4 +1,4 @@
-// CSP-safe API utility
+// API utility for barber store
 const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:5000';
 
 class APIService {
@@ -6,7 +6,7 @@ class APIService {
     this.baseURL = API_URL;
   }
 
-  // CSP-safe fetch with multiple fallback strategies
+  // Fetch with error handling
   async safeFetch(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
     

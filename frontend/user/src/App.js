@@ -6,8 +6,6 @@ import { useEffect } from 'react';
 import { CartProvider } from './context/CartContext'; 
 import { SocketProvider } from './context/SocketContext';
 import UserRoutes from './routes/UserRoutes';
-import TawkTo from './components/TawkTo';
-import CSPDebugger from './components/CSPDebugger';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,10 +35,7 @@ function AppContent() {
             <Routes>
               {/* User routes */}
               <Route path="/*" element={<UserRoutes />} />
-            </Routes>
-          </main>          <Footer />
-          <TawkTo />
-          <CSPDebugger />
+            </Routes>          </main>          <Footer />
         </div>
       </CartProvider>
     </SocketProvider>
